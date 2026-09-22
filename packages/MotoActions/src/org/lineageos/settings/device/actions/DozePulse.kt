@@ -45,12 +45,10 @@ class DozePulse(
     private var lastDozeTime: Long = 0L
 
     fun onScreenStateChanged(screenOn: Boolean) {
-        if (!wakeLock.isHeld) {
-            if (screenOn) {
-                wakeLock.acquire()
-            } else {
-                wakeLock.release()
-            }
+        if (screenOn && !wakeLock.isHeld) {
+            wakeLock.acquire()
+        } else if (!screenOn && wakeLock.isHeld) {
+            wakeLock.release()
         }
 
         if (screenOn) {
